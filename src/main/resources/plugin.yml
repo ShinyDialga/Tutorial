@@ -1,0 +1,4 @@
+name: Tutorial
+main: dialga.shiny.tutorial.TutorialPlugin
+version: 0.1
+description: Tutorial framework for Minecraft.
