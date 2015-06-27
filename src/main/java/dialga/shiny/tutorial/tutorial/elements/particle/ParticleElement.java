@@ -1,6 +1,6 @@
-package dialga.shiny.tutorial.tutorial.stages.elements.particle;
+package dialga.shiny.tutorial.tutorial.elements.particle;
 
-import dialga.shiny.tutorial.tutorial.stages.elements.StageElement;
+import dialga.shiny.tutorial.tutorial.elements.StageElement;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

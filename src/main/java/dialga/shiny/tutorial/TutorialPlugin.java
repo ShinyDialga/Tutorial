@@ -1,8 +1,11 @@
 package dialga.shiny.tutorial;
 
+import dialga.shiny.tutorial.tutorial.TutorialListener;
 import dialga.shiny.tutorial.utils.CommandUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,7 +19,16 @@ public class TutorialPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        Bukkit.getPluginManager().registerEvents(new TutorialListener(), getInstance());
+
         CommandUtils.registerCommands();
+    }
+
+    public void onDisable() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.removeMetadata("tutorial-walk", TutorialPlugin.getInstance());
+            player.removeMetadata("tutorial-observe", TutorialPlugin.getInstance());
+        }
     }
 
     public static TutorialPlugin getInstance() {

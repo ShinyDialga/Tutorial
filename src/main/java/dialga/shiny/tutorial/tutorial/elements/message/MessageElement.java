@@ -1,6 +1,7 @@
-package dialga.shiny.tutorial.tutorial.stages.elements.message;
+package dialga.shiny.tutorial.tutorial.elements.message;
 
-import dialga.shiny.tutorial.tutorial.stages.elements.StageElement;
+import dialga.shiny.tutorial.tutorial.elements.StageElement;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
 /**
@@ -30,6 +31,8 @@ public class MessageElement extends StageElement {
         switch (getScope()) {
             case CHAT:
                 watcher.sendMessage(getMessage());
+            case TITLE:
+                watcher.showTitle(new TextComponent(getMessage()));
         }
     }
 }

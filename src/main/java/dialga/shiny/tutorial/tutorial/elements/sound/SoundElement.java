@@ -1,6 +1,6 @@
-package dialga.shiny.tutorial.tutorial.stages.elements.sound;
+package dialga.shiny.tutorial.tutorial.elements.sound;
 
-import dialga.shiny.tutorial.tutorial.stages.elements.StageElement;
+import dialga.shiny.tutorial.tutorial.elements.StageElement;
 import org.bukkit.entity.Player;
 
 /**
