@@ -1,16 +1,17 @@
 package dialga.shiny.tutorial.tutorial.elements.effect;
 
 import dialga.shiny.tutorial.tutorial.elements.StageElement;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.PacketPlayOutExplosion;
+import dialga.shiny.tutorial.util.ReflectionUtils;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by ShinyDialga45 on 6/25/2015.
+ * Created by ElectroidFilms on 6/25/2015.
  */
 public class ExplosionElement extends StageElement {
 
@@ -25,7 +26,19 @@ public class ExplosionElement extends StageElement {
 
     @Override
     public final void perform(final Player viewer) {
-        ((CraftPlayer) viewer).getHandle().playerConnection.sendPacket(new PacketPlayOutExplosion(location.getX(), location.getY(), location.getZ(), power, new ArrayList<BlockPosition>(), null));
+        try {
+            Constructor constructor = ReflectionUtils.getNmsClass("PacketPlayOutExplosion")
+                    .getConstructor(double.class, double.class, double.class, float.class, List.class, ReflectionUtils.getNmsClass("Vec3D"));
+            ReflectionUtils.sendPacket(viewer, constructor.newInstance(location.getX(), location.getY(), location.getZ(), power, new ArrayList(), null));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public final Location getLocation() {

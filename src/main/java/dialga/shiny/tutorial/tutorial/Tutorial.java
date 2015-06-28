@@ -73,7 +73,7 @@ public class Tutorial {
         for (final StageElement element : elements) {
             tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(TutorialPlugin.getInstance(), new Runnable() {
                 public void run() {
-                    element.preform(viewer);
+                    element.perform(viewer);
                 }
             }, delay + element.getTickDelay()));
             delay += element.getTickDelay();

@@ -1,16 +1,20 @@
 package dialga.shiny.tutorial.tutorial.elements.effect;
 
 import dialga.shiny.tutorial.tutorial.elements.StageElement;
+import dialga.shiny.tutorial.util.ReflectionUtils;
 import dialga.shiny.tutorial.util.SpawnUtils;
 import dialga.shiny.tutorial.util.TimeUnit;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftFirework;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ShinyDialga45 on 6/25/2015.
@@ -51,10 +55,32 @@ public class FireworkElement extends StageElement {
                 .build();
         meta.addEffect(effect);
         firework.setFireworkMeta(meta);
-        NBTTagCompound nbtData = new NBTTagCompound();
-        nbtData.setInt("Life", lifeTicks);
-        nbtData.setInt("LifeTime", lifetimeTicks);
-        ((CraftFirework) firework).getHandle().a(nbtData);
+        try {
+            /** Load all the nbt values onto a map to proccess later. */
+            Map<String, Object> values = new HashMap<String, Object>();
+            values.put("Life", lifeTicks);
+            values.put("LifeTime", lifetimeTicks);
+            /** Get all the nms/craftbukkit classes for reflection. */
+            Class nbtClass = ReflectionUtils.getNmsClass("NBTTagCompound");
+            Class craftFireworkClass = ReflectionUtils.getCraftClass("entity.CraftFirework");
+            Class entityFireworksClass = ReflectionUtils.getNmsClass("EntityFireworks");
+            /** Get the handle from the craft firework. */
+            Object craftFirework = craftFireworkClass.cast(firework);
+            Method getHandle = craftFireworkClass.getDeclaredMethod("getHandle", new Class<?>[0]);
+            Object handle = getHandle.invoke(craftFirework, null);
+            /** Add the nbt to the handle. */
+            Method addNbt = entityFireworksClass.getDeclaredMethod("a", nbtClass);
+            addNbt.invoke(handle, ReflectionUtils.createRawNbt(values));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            firework.detonate();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            firework.detonate();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            firework.detonate();
+        }
     }
 
     public final Location getLocation() {
