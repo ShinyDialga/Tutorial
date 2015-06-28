@@ -34,7 +34,7 @@ public class TutorialPlugin extends JavaPlugin {
         return CommandUtils.onCommand(sender, cmd, commandLabel, args);
     }
 
-    public static void callEvent(Event event) {
+    public void callEvent(Event event) {
         instance.getServer().getPluginManager().callEvent(event);
     }
 

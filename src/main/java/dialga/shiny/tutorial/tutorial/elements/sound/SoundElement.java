@@ -21,7 +21,7 @@ public class SoundElement extends StageElement {
     }
 
     @Override
-    public void preform(final Player viewer) {
+    public void perform(final Player viewer) {
         viewer.playSound(viewer.getLocation(), sound, volume, pitch);
     }
 

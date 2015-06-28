@@ -18,7 +18,7 @@ public class MovementElement extends StageElement {
     }
 
     @Override
-    public final void preform(final Player viewer) {
+    public final void perform(final Player viewer) {
         if (canWalk()) {
             MetadataUtils.removeMetadata(viewer, TutorialListener.WALK_METADATA);
         } else {

@@ -12,24 +12,24 @@ import org.bukkit.util.Vector;
  */
 public class EntitySpawnElement extends StageElement {
 
-    private final Class<? extends org.bukkit.entity.Entity> clazz;
+    private final Class<? extends Entity> clazz;
     private final Vector velocity;
     private final Location location;
 
-    @Override
-    public final void preform(final Player viewer) {
-        org.bukkit.entity.Entity entity = SpawnUtils.spawnViewerSpecificEntity(viewer, location, clazz);
-        entity.setVelocity(getVelocity());
-    }
-
-    public EntitySpawnElement(String delay, Class<? extends org.bukkit.entity.Entity> clazz, Location location, Vector velocity) {
+    public EntitySpawnElement(String delay, Class<? extends Entity> clazz, Location location, Vector velocity) {
         super(delay);
         this.clazz = clazz;
         this.velocity = velocity;
         this.location = location;
     }
 
-    public final Class<? extends org.bukkit.entity.Entity> getType() {
+        @Override
+    public final void preform(final Player viewer) {
+        org.bukkit.entity.Entity entity = SpawnUtils.spawnViewerSpecificEntity(viewer, location, clazz);
+        entity.setVelocity(getVelocity());
+    }
+
+    public final Class<? extends Entity> getType() {
         return this.clazz;
     }
 

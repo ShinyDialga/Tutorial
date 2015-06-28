@@ -26,7 +26,7 @@ public class TitleElement extends StageElement {
     }
 
     @Override
-    public final void preform(final Player viewer) {
+    public final void perform(final Player viewer) {
         viewer.showTitle(TextComponent.fromLegacyText(title), TextComponent.fromLegacyText(subTitle), fadeInTicks, stayTicks, fadeOutTicks);
     }
 

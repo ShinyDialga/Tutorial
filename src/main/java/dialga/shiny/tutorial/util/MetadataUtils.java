@@ -15,7 +15,6 @@ import java.util.WeakHashMap;
 public class MetadataUtils {
 
     private final static JavaPlugin plugin = TutorialPlugin.getInstance();
-    private static WeakHashMap<Metadatable, Set<String>> knownKeys = new WeakHashMap<Metadatable, Set<String>>();
 
     /**
      * Add a new FixedMetadataValue and add it to the metadatable.
@@ -25,15 +24,6 @@ public class MetadataUtils {
      */
     public static void addMetadata(Metadatable metadatable, String key, Object value) {
         metadatable.setMetadata(key, new FixedMetadataValue(plugin, value));
-        if (knownKeys.get(metadatable) == null) {
-            Set<String> keys = new HashSet<String>();
-            keys.add(key);
-            knownKeys.put(metadatable, keys);
-        } else if (!knownKeys.get(metadatable).contains(key)) {
-            Set<String> keys = knownKeys.get(metadatable);
-            keys.add(key);
-            knownKeys.put(metadatable, keys);
-        }
     }
 
     /**
@@ -43,7 +33,6 @@ public class MetadataUtils {
      */
     public static void removeMetadata(Metadatable metadatable, String key) {
         metadatable.removeMetadata(key, plugin);
-        knownKeys.get(metadatable).remove(key);
     }
 
     /**

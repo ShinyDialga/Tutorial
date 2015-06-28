@@ -39,7 +39,7 @@ public class FireworkElement extends StageElement {
     }
 
     @Override
-    public final void preform(final Player viewer) {
+    public final void perform(final Player viewer) {
         Firework firework = (Firework) SpawnUtils.spawnViewerSpecificEntity(viewer, location, Firework.class);
         FireworkMeta meta = firework.getFireworkMeta();
         FireworkEffect effect = FireworkEffect.builder()

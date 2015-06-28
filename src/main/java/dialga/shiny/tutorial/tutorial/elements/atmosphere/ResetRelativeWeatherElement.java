@@ -13,7 +13,7 @@ public class ResetRelativeWeatherElement extends StageElement {
     }
 
     @Override
-    public void preform(Player viewer) {
+    public void perform(Player viewer) {
         viewer.resetPlayerWeather();
     }
 

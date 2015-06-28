@@ -17,7 +17,7 @@ public class ChatElement extends StageElement {
     }
 
     @Override
-    public final void preform(final Player viewer) {
+    public final void perform(final Player viewer) {
         viewer.sendMessage(message);
     }
 

@@ -17,7 +17,7 @@ public class GamemodeElement extends StageElement {
     }
 
     @Override
-    public final void preform(final Player viewer) {
+    public final void perform(final Player viewer) {
         viewer.setGameMode(getGamemode());
     }
 

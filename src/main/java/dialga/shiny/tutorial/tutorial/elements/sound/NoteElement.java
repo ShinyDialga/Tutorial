@@ -36,7 +36,7 @@ public class NoteElement extends StageElement {
     }
 
     @Override
-    public final void preform(final Player viewer) {
+    public final void perform(final Player viewer) {
         viewer.playNote(location, instrument, note);
     }
 

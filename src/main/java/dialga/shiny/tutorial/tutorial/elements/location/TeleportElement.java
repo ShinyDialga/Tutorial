@@ -20,7 +20,7 @@ public class TeleportElement extends StageElement {
     }
 
     @Override
-    public final void preform(final Player viewer) {
+    public final void perform(final Player viewer) {
         entity.teleport(location);
     }
 

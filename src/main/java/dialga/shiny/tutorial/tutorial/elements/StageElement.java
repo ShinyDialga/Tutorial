@@ -41,6 +41,6 @@ public abstract class StageElement {
      * Show the stage element to a player.
      * @param viewer The player to show the stage element to.
      */
-    public abstract void preform(final Player viewer);
+    public abstract void perform(final Player viewer);
 
 }

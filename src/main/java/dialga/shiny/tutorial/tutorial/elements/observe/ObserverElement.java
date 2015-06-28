@@ -18,7 +18,7 @@ public class ObserverElement extends StageElement {
     }
 
     @Override
-    public final void preform(final Player viewer) {
+    public final void perform(final Player viewer) {
         if (isObserver) {
             MetadataUtils.addMetadata(viewer, TutorialListener.OBSERVE_METADATA, isObserver);
         } else {

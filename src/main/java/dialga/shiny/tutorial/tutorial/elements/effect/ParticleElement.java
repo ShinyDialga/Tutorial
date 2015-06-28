@@ -37,7 +37,7 @@ public class ParticleElement extends StageElement {
     }
 
     @Override
-    public final void preform(final Player viewer) {
+    public final void perform(final Player viewer) {
         viewer.playEffect(location, effect, id, data, offX, offY, offZ, speed, count, radius);
     }
 

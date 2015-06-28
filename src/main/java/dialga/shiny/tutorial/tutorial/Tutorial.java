@@ -67,7 +67,7 @@ public class Tutorial {
      */
     public void playTutorial(final Player viewer) {
         TutorialStartEvent event = new TutorialStartEvent(this, viewer);
-        TutorialPlugin.callEvent(event);
+        TutorialPlugin.getInstance().callEvent(event);
         if (event.isCancelled()) return;
         int delay = 0;
         for (final StageElement element : elements) {
@@ -84,7 +84,7 @@ public class Tutorial {
             @Override
             public void run() {
                 TutorialFinishEvent event = new TutorialFinishEvent(tutorial, viewer);
-                TutorialPlugin.callEvent(event);
+                TutorialPlugin.getInstance().callEvent(event);
             }
         }, delay));
     }
