@@ -13,7 +13,7 @@ public class WalkElement extends StageElement {
     private final Entity entity;
     private final Location location;
 
-    public WalkElement(final Entity entity, final Location location, final int delay) {
+    public WalkElement(String delay, Entity entity, Location location) {
         super(delay);
         this.entity = entity;
         this.location = location;
@@ -28,7 +28,7 @@ public class WalkElement extends StageElement {
     }
 
     @Override
-    public final void onElementPerform(final Player watcher) {
+    public final void preform(final Player viewer) {
         //TODO - Make getEntity() walk to getLocation()
     }
 

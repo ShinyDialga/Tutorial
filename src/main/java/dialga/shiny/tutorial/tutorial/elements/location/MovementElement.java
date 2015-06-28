@@ -1,9 +1,9 @@
 package dialga.shiny.tutorial.tutorial.elements.location;
 
-import dialga.shiny.tutorial.TutorialPlugin;
+import dialga.shiny.tutorial.tutorial.TutorialListener;
 import dialga.shiny.tutorial.tutorial.elements.StageElement;
+import dialga.shiny.tutorial.util.MetadataUtils;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 
 /**
  * Created by ShinyDialga45 on 6/25/2015.
@@ -12,22 +12,22 @@ public class MovementElement extends StageElement {
 
     private final boolean canWalk;
 
-    public MovementElement(final boolean canWalk, final int delay) {
+    public MovementElement(String delay, boolean canWalk) {
         super(delay);
         this.canWalk = canWalk;
     }
 
-    public final boolean getCanWalk() {
-        return this.canWalk;
+    @Override
+    public final void preform(final Player viewer) {
+        if (canWalk()) {
+            MetadataUtils.removeMetadata(viewer, TutorialListener.WALK_METADATA);
+        } else {
+            MetadataUtils.addMetadata(viewer, TutorialListener.WALK_METADATA, canWalk);
+        }
     }
 
-    @Override
-    public final void onElementPerform(final Player watcher) {
-        if (getCanWalk()) {
-            watcher.removeMetadata("tutorial-walk", TutorialPlugin.getInstance());
-        } else {
-            watcher.setMetadata("tutorial-walk", new FixedMetadataValue(TutorialPlugin.getInstance(), getCanWalk()));
-        }
+    public final boolean canWalk() {
+        return this.canWalk;
     }
 
 }

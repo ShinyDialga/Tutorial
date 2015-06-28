@@ -13,10 +13,15 @@ public class TeleportElement extends StageElement {
     private final Entity entity;
     private final Location location;
 
-    public TeleportElement(final Entity entity, final Location location, final int delay) {
+    public TeleportElement(String delay, Entity entity, Location location) {
         super(delay);
         this.entity = entity;
         this.location = location;
+    }
+
+    @Override
+    public final void preform(final Player viewer) {
+        entity.teleport(location);
     }
 
     public final Entity getEntity() {
@@ -25,11 +30,6 @@ public class TeleportElement extends StageElement {
 
     public final Location getLocation() {
         return this.location;
-    }
-
-    @Override
-    public final void onElementPerform(final Player watcher) {
-        getEntity().teleport(getLocation());
     }
 
 }

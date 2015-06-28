@@ -9,20 +9,20 @@ import org.bukkit.entity.Player;
  */
 public class GamemodeElement extends StageElement {
 
-    private final GameMode gameMode;
+    private final GameMode gamemode;
 
-    public GamemodeElement(final GameMode gameMode, final int delay) {
+    public GamemodeElement(String delay, GameMode gamemode) {
         super(delay);
-        this.gameMode = gameMode;
-    }
-
-    public final GameMode getGameMode() {
-        return this.gameMode;
+        this.gamemode = gamemode;
     }
 
     @Override
-    public final void onElementPerform(final Player watcher) {
-        watcher.setGameMode(getGameMode());
+    public final void preform(final Player viewer) {
+        viewer.setGameMode(getGamemode());
+    }
+
+    public final GameMode getGamemode() {
+        return this.gamemode;
     }
 
 }

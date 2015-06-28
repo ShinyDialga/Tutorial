@@ -1,4 +1,4 @@
-package dialga.shiny.tutorial.utils;
+package dialga.shiny.tutorial.util;
 
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
