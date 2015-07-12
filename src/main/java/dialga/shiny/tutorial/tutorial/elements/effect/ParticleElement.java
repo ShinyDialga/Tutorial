@@ -1,6 +1,7 @@
 package dialga.shiny.tutorial.tutorial.elements.effect;
 
-import dialga.shiny.tutorial.tutorial.elements.StageElement;
+import dialga.shiny.tutorial.tutorial.elements.TutorialElement;
+import dialga.shiny.tutorial.util.EntityUtils;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -9,10 +10,10 @@ import org.bukkit.util.Vector;
 /**
  * Created by ShinyDialga45 on 6/25/2015.
  */
-public class ParticleElement extends StageElement {
+public class ParticleElement extends TutorialElement {
 
     private final Effect effect;
-    private final Location location;
+    private final String location;
     private final int id;
     private final int data;
     private final float offX;
@@ -22,7 +23,7 @@ public class ParticleElement extends StageElement {
     private final int count;
     private final int radius;
 
-    public ParticleElement(String delay, Effect effect, Location location, Vector offset, int id, int data, float speed, int count, int radius) {
+    public ParticleElement(String delay, Effect effect, String location, Vector offset, int id, int data, float speed, int count, int radius) {
         super(delay);
         this.effect = effect;
         this.location = location;
@@ -38,14 +39,14 @@ public class ParticleElement extends StageElement {
 
     @Override
     public final void perform(final Player viewer) {
-        viewer.playEffect(location, effect, id, data, offX, offY, offZ, speed, count, radius);
+        viewer.playEffect(EntityUtils.newRelativeLocation(location, viewer), effect, id, data, offX, offY, offZ, speed, count, radius);
     }
 
     public final Effect getEffect() {
         return this.effect;
     }
 
-    public final Location getLocation() {
+    public final String getLocation() {
         return this.location;
     }
 

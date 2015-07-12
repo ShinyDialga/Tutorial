@@ -1,20 +1,25 @@
 package dialga.shiny.tutorial.tutorial.elements.location;
 
-import dialga.shiny.tutorial.tutorial.TutorialListener;
-import dialga.shiny.tutorial.tutorial.elements.StageElement;
+import dialga.shiny.tutorial.listener.TutorialListener;
+import dialga.shiny.tutorial.tutorial.elements.TutorialElement;
 import dialga.shiny.tutorial.util.MetadataUtils;
 import org.bukkit.entity.Player;
 
 /**
  * Created by ShinyDialga45 on 6/25/2015.
  */
-public class MovementElement extends StageElement {
+public class MovementElement extends TutorialElement {
 
-    private final boolean canWalk;
+    private final boolean canMove;
 
-    public MovementElement(String delay, boolean canWalk) {
+    /**
+     * Change whether the player can move.
+     * @param delay The delay from the previous element.
+     * @param canMove Whether the player can move.
+     */
+    public MovementElement(String delay, boolean canMove) {
         super(delay);
-        this.canWalk = canWalk;
+        this.canMove = canMove;
     }
 
     @Override
@@ -22,12 +27,12 @@ public class MovementElement extends StageElement {
         if (canWalk()) {
             MetadataUtils.removeMetadata(viewer, TutorialListener.WALK_METADATA);
         } else {
-            MetadataUtils.addMetadata(viewer, TutorialListener.WALK_METADATA, canWalk);
+            MetadataUtils.addMetadata(viewer, TutorialListener.WALK_METADATA, canMove);
         }
     }
 
     public final boolean canWalk() {
-        return this.canWalk;
+        return this.canMove;
     }
 
 }

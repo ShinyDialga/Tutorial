@@ -1,13 +1,12 @@
 package dialga.shiny.tutorial.tutorial.elements.atmosphere;
 
-import dialga.shiny.tutorial.tutorial.elements.StageElement;
-import dialga.shiny.tutorial.util.TimeUnit;
+import dialga.shiny.tutorial.tutorial.elements.TutorialElement;
 import org.bukkit.entity.Player;
 
 /**
  * Created by ElectroidFilms on 6/27/15.
  */
-public class RelativeTimeElement extends StageElement {
+public class RelativeTimeElement extends TutorialElement {
 
     private final long time;
 

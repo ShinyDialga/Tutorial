@@ -1,16 +1,20 @@
 package dialga.shiny.tutorial.tutorial.elements.message;
 
-import dialga.shiny.tutorial.tutorial.elements.StageElement;
-import net.md_5.bungee.api.chat.TextComponent;
+import dialga.shiny.tutorial.tutorial.elements.TutorialElement;
 import org.bukkit.entity.Player;
 
 /**
  * Created by ElectroidFilms on 6/27/2015.
  */
-public class ChatElement extends StageElement {
+public class ChatElement extends TutorialElement {
 
     private final String message;
 
+    /**
+     * Send a chat box message to a player (supports formatting).
+     * @param delay The delay from the previous element.
+     * @param message The chat message.
+     */
     public ChatElement(String delay, String message) {
         super(delay);
         this.message = message;

@@ -30,6 +30,11 @@ public enum TimeUnit {
         return this.ticks;
     }
 
+    /**
+     * Convert a string formatted time unit to ticks (ie. "1m20s" -> 1600 ticks).
+     * @param string The string formatted time unit.
+     * @return The amount of ticks.
+     */
     public static int toTicks(String string) {
         int ticks = 0;
         for (TimeUnit unit : TimeUnit.values()) {

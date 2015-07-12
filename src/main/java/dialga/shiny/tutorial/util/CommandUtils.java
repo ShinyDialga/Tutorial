@@ -52,7 +52,7 @@ public class CommandUtils {
         } catch (CommandException e) {
             sender.sendMessage(org.bukkit.ChatColor.RED + e.getMessage());
         }
-
         return true;
     }
+
 }

@@ -1,13 +1,13 @@
 package dialga.shiny.tutorial.tutorial.elements.atmosphere;
 
-import dialga.shiny.tutorial.tutorial.elements.StageElement;
+import dialga.shiny.tutorial.tutorial.elements.TutorialElement;
 import org.bukkit.WeatherType;
 import org.bukkit.entity.Player;
 
 /**
  * Created by ElectroidFilms on 6/27/15.
  */
-public class RelativeWeatherElement extends StageElement {
+public class RelativeWeatherElement extends TutorialElement {
 
     private final WeatherType weather;
 

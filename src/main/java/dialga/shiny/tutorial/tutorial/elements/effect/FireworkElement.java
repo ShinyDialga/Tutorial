@@ -1,8 +1,8 @@
 package dialga.shiny.tutorial.tutorial.elements.effect;
 
-import dialga.shiny.tutorial.tutorial.elements.StageElement;
+import dialga.shiny.tutorial.tutorial.elements.TutorialElement;
 import dialga.shiny.tutorial.util.ReflectionUtils;
-import dialga.shiny.tutorial.util.SpawnUtils;
+import dialga.shiny.tutorial.util.EntityUtils;
 import dialga.shiny.tutorial.util.TimeUnit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -11,17 +11,15 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by ShinyDialga45 on 6/25/2015.
  */
-public class FireworkElement extends StageElement {
+public class FireworkElement extends TutorialElement {
 
-    private final Location location;
+    private final String location;
     private final FireworkEffect.Type type;
     private final Color[] colors;
     private final Color[] fades;
@@ -30,7 +28,19 @@ public class FireworkElement extends StageElement {
     private final int lifeTicks;
     private final int lifetimeTicks;
 
-    public FireworkElement(String delay, Location location, FireworkEffect.Type type, Color[] colors, Color[] fades, boolean trail, boolean flicker, String life, String lifetime) {
+    /**
+     * Spawn a new firework entity.
+     * @param delay The delay from the previous elements.
+     * @param location The relative location of the firework spawn.
+     * @param type The type of firework effect.
+     * @param colors The array of colors for this effect.
+     * @param fades The array of colors that fade away for this effect.
+     * @param trail Whether there is a trail.
+     * @param flicker Whether the firework flickers.
+     * @param life The life duration of the firework.
+     * @param lifetime The entire lifetime of the firework.
+     */
+    public FireworkElement(String delay, String location, FireworkEffect.Type type, Color[] colors, Color[] fades, boolean trail, boolean flicker, String life, String lifetime) {
         super(delay);
         this.location = location;
         this.type = type;
@@ -44,7 +54,7 @@ public class FireworkElement extends StageElement {
 
     @Override
     public final void perform(final Player viewer) {
-        Firework firework = (Firework) SpawnUtils.spawnViewerSpecificEntity(viewer, location, Firework.class);
+        Firework firework = (Firework) EntityUtils.spawnViewerSpecificEntity(viewer, EntityUtils.newRelativeLocation(location, viewer), Firework.class);
         FireworkMeta meta = firework.getFireworkMeta();
         FireworkEffect effect = FireworkEffect.builder()
                 .flicker(flicker)
@@ -55,35 +65,13 @@ public class FireworkElement extends StageElement {
                 .build();
         meta.addEffect(effect);
         firework.setFireworkMeta(meta);
-        try {
-            /** Load all the nbt values onto a map to proccess later. */
-            Map<String, Object> values = new HashMap<String, Object>();
-            values.put("Life", lifeTicks);
-            values.put("LifeTime", lifetimeTicks);
-            /** Get all the nms/craftbukkit classes for reflection. */
-            Class nbtClass = ReflectionUtils.getNmsClass("NBTTagCompound");
-            Class craftFireworkClass = ReflectionUtils.getCraftClass("entity.CraftFirework");
-            Class entityFireworksClass = ReflectionUtils.getNmsClass("EntityFireworks");
-            /** Get the handle from the craft firework. */
-            Object craftFirework = craftFireworkClass.cast(firework);
-            Method getHandle = craftFireworkClass.getDeclaredMethod("getHandle", new Class<?>[0]);
-            Object handle = getHandle.invoke(craftFirework, null);
-            /** Add the nbt to the handle. */
-            Method addNbt = entityFireworksClass.getDeclaredMethod("a", nbtClass);
-            addNbt.invoke(handle, ReflectionUtils.createRawNbt(values));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            firework.detonate();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            firework.detonate();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            firework.detonate();
-        }
+        Map<String, Object> nbt = new HashMap<String, Object>();
+        nbt.put("Life", lifeTicks);
+        nbt.put("LifeTime", lifetimeTicks);
+        ReflectionUtils.applyNbt(firework, ReflectionUtils.createRawNbt(nbt));
     }
 
-    public final Location getLocation() {
+    public final String getLocation() {
         return this.location;
     }
 

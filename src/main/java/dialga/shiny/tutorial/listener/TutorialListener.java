@@ -1,4 +1,4 @@
-package dialga.shiny.tutorial.tutorial;
+package dialga.shiny.tutorial.listener;
 
 import dialga.shiny.tutorial.util.MetadataUtils;
 import org.bukkit.Location;
@@ -22,7 +22,7 @@ import org.bukkit.inventory.InventoryHolder;
 public class TutorialListener implements Listener {
 
     public static final String WALK_METADATA    = "tutorial-walk";
-    public static final String OBSERVE_METADATA = "tutorial-observe";
+    public static final String OBSERVE_METADATA = "tutorial-interact";
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onLeave(PlayerQuitEvent event) {

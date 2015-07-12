@@ -13,7 +13,6 @@ public class TutorialFinishEvent extends TutorialEvent {
     private static final HandlerList handlers = new HandlerList();
     private final Tutorial tutorial;
     private final Player viewer;
-    private boolean cancelled = false;
 
     /**
      * Creates a new TutorialFinishEvent.

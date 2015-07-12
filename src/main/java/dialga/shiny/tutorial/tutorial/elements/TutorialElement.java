@@ -3,21 +3,19 @@ package dialga.shiny.tutorial.tutorial.elements;
 import dialga.shiny.tutorial.util.TimeUnit;
 import org.bukkit.entity.Player;
 
-import java.sql.Time;
-
 /**
  * Created by ShinyDialga45 on 6/25/2015.
  */
-public abstract class StageElement {
+public abstract class TutorialElement {
 
     /** The delay from the previous element. */
     private final String delay;
 
     /**
-     * Creates a new StageElement
+     * Creates a new TutorialElement
      * @param delay The delay in ticks from the previous element.
      */
-    public StageElement(String delay) {
+    public TutorialElement(String delay) {
         this.delay = delay;
     }
 

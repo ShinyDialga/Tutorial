@@ -3,37 +3,86 @@ package dialga.shiny.tutorial.tutorial;
 import dialga.shiny.tutorial.TutorialPlugin;
 import dialga.shiny.tutorial.event.tutorial.TutorialFinishEvent;
 import dialga.shiny.tutorial.event.tutorial.TutorialStartEvent;
-import dialga.shiny.tutorial.tutorial.elements.StageElement;
-import dialga.shiny.tutorial.tutorial.elements.location.MovementElement;
-import dialga.shiny.tutorial.tutorial.elements.observe.ObserverElement;
+import dialga.shiny.tutorial.listener.TutorialListener;
+import dialga.shiny.tutorial.tutorial.elements.TutorialElement;
+import dialga.shiny.tutorial.util.MetadataUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by ShinyDialga45 on 6/25/2015.
  */
 public class Tutorial {
 
-    private final String name;
-    private final List<StageElement> elements;
-    private final Set<Integer> tasks;
+    /** The name of the tutorial. */
+    protected final String name;
+    /** The list of elements, in order, for the tutorial. */
+    protected final List<TutorialElement> elements;
+    /** The map of tasks for each viewer watching the tutorial. */
+    protected final Map<UUID, Set<Integer>> tasks;
 
     /**
      * Creates a new tutorial.
      * @param name The name of the tutorial.
      * @param elements The list of elements of the tutorial.
      */
-    public Tutorial(final String name, final List<StageElement> elements) {
+    public Tutorial(final String name, final List<TutorialElement> elements) {
         this.name = name;
-        String time = elements.get(elements.size() - 1).getStringDelay();
-        elements.add(new ObserverElement(time, false));
-        elements.add(new MovementElement(time, true));
         this.elements = elements;
-        this.tasks = new HashSet<Integer>();
+        this.tasks = new HashMap<UUID, Set<Integer>>();
+    }
+
+    /**
+     * Cancel the tutorial for a specific viewer.
+     * @param viewer The viewer of the tutorial.
+     */
+    public void cancel(Player viewer) {
+        UUID id = viewer.getUniqueId();
+        MetadataUtils.removeMetadata(viewer, TutorialListener.OBSERVE_METADATA);
+        MetadataUtils.removeMetadata(viewer, TutorialListener.WALK_METADATA);
+        if (tasks.containsKey(id)) {
+            for (Integer task : tasks.get(id)) {
+                Bukkit.getScheduler().cancelTask(task);
+            }
+            tasks.remove(id);
+        }
+    }
+
+    /**
+     * Play the tutorial to the viewer.
+     * @param viewer
+     */
+    public void play(final Player viewer) {
+        cancel(viewer);
+        final Tutorial tutorial = this;
+        Set<Integer> playerTasks = new HashSet<Integer>();
+        /** Handle tutorial start event. */
+        TutorialStartEvent event = new TutorialStartEvent(this, viewer);
+        TutorialPlugin.getInstance().callEvent(event);
+        if (event.isCancelled()) return;
+        /** Schedule all the elements in the tutorial. */
+        int delay = 0;
+        for (final TutorialElement element : elements) {
+            playerTasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(TutorialPlugin.getInstance(), new Runnable() {
+                public void run() {
+                    element.perform(viewer);
+                }
+            }, delay + element.getTickDelay()));
+            delay += element.getTickDelay();
+        }
+        /** Schedule tutorial finish event. */
+        playerTasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(TutorialPlugin.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                TutorialFinishEvent event = new TutorialFinishEvent(tutorial, viewer);
+                TutorialPlugin.getInstance().callEvent(event);
+                cancel(viewer);
+            }
+        }, delay));
+        /** Add the task ids to the task map. */
+        tasks.put(viewer.getUniqueId(), playerTasks);
     }
 
     /**
@@ -48,44 +97,8 @@ public class Tutorial {
      * Get the elements of this tutorial.
      * @return The list of elements for this tutorial.
      */
-    public final List<StageElement> getElements() {
+    public final List<TutorialElement> getElements() {
         return this.elements;
     }
 
-    /**
-     * Cancel the tutorial and all subsequent future tasks.
-     */
-    public void cancel() {
-        for (Integer task : tasks) {
-            Bukkit.getScheduler().cancelTask(task);
-        }
-    }
-
-    /**
-     * Play the tutorial to the viewer.
-     * @param viewer
-     */
-    public void playTutorial(final Player viewer) {
-        TutorialStartEvent event = new TutorialStartEvent(this, viewer);
-        TutorialPlugin.getInstance().callEvent(event);
-        if (event.isCancelled()) return;
-        int delay = 0;
-        for (final StageElement element : elements) {
-            tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(TutorialPlugin.getInstance(), new Runnable() {
-                public void run() {
-                    element.perform(viewer);
-                }
-            }, delay + element.getTickDelay()));
-            delay += element.getTickDelay();
-        }
-        /** Schedule the finish event. */
-        final Tutorial tutorial = this;
-        tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(TutorialPlugin.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                TutorialFinishEvent event = new TutorialFinishEvent(tutorial, viewer);
-                TutorialPlugin.getInstance().callEvent(event);
-            }
-        }, delay));
-    }
 }

@@ -1,10 +1,12 @@
 package dialga.shiny.tutorial.util;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +16,6 @@ import java.util.regex.Pattern;
  * Created by ElectroidFilms on 6/27/15.
  */
 public class ReflectionUtils {
-
 
     /**
      * Get the nms class given the package path.
@@ -56,7 +57,6 @@ public class ReflectionUtils {
      */
     public static Object createRawNbt(Map<String, Object> keyToValueMap) {
         try {
-            // bool, byte, byte[], double, float, int, int[], long, short, string,
             Class clazz = getNmsClass("NBTTagCompound");
             Object tag = clazz.newInstance();
             /** Iterate through each value and find the matching declared method to add the nbt data. */
@@ -102,6 +102,49 @@ public class ReflectionUtils {
     }
 
     /**
+     * Create a raw NMS NBTTagCompound.
+     * @param keysAndValues The keys and values in a list (ie. key1, value1, key2, value2, etc.)
+     * @return The new NBtTagCompound as an object.
+     */
+    public static Object createRawNbt(Object... keysAndValues) {
+        if (keysAndValues.length % 2 == 0) {
+            Map<String, Object> keyToValueMap = new HashMap<String, Object>();
+            for (int i = keysAndValues.length - 1; i > 0; i -= 2) {
+                keyToValueMap.put(keysAndValues[i - 1].toString(), keysAndValues[i]);
+            }
+            return createRawNbt(keyToValueMap);
+        }
+        return null;
+    }
+
+    /**
+     * Apply a nbtTagCompound to an entity
+     * @param entity The bukkit entity to apply the nbt to.
+     * @param nbtTagCompound The nbt tag compound to apply to the bukkit entity.
+     */
+    public static void applyNbt(Entity entity, Object nbtTagCompound) {
+        try {
+            /** Get the craft entity from the bukkit entity. */
+            Class nbtClass = getNmsClass("NBTTagCompound");
+            Class craftClass = getCraftClass("entity." + entity.getClass().getSimpleName());
+            Object craftEntity = craftClass.cast(entity);
+            /** Get the handle from the craft entity. */
+            Method getHandle = craftClass.getDeclaredMethod("getHandle", new Class[0]);
+            Object handle = getHandle.invoke(craftEntity, null);
+            Class handleClass = handle.getClass();
+            /** Add the nbt data to the handle. */
+            Method addNbt = handleClass.getDeclaredMethod("a", nbtClass);
+            addNbt.invoke(handle, nbtTagCompound);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Send a packet to a player.
      * @param player The player to send the packet to.
      * @param packet The packet object.
@@ -112,7 +155,7 @@ public class ReflectionUtils {
             Class craftPlayerClass =      getCraftClass("entity.CraftPlayer");
             Class handleClass =           getNmsClass  ("EntityPlayer");
             Class playerConnectionClass = getNmsClass  ("PlayerConnection");
-            Class packetClass =           getNmsClass  ("Packet");
+            Class packetClass =           getNmsClass("Packet");
             /** Get the craft player object from the bukkit player. */
             Object craftPlayer = craftPlayerClass.cast(player);
             /** Get the handle from the craft player. */
