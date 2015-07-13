@@ -97,7 +97,7 @@ public class Tutorial {
      * Get the elements of this tutorial.
      * @return The list of elements for this tutorial.
      */
-    public final List<TutorialElement> getElements() {
+    public List<TutorialElement> getElements() {
         return this.elements;
     }
 
